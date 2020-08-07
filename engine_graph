@@ -1,0 +1,104 @@
+#!/bin/bash
+
+clear
+#echo Enter your programm name
+
+#read name
+
+#touch $name
+#name = main
+
+
+find . -type f ! -name "*.*" -exec mv {} {}.cpp \;
+
+rm $name
+mv engine_graph.cpp engine_graph
+touch makefile
+touch test.hpp
+touch graph.hpp
+touch graph.cpp
+
+#indo test.hpp
+echo '#ifndef TEST_HPP' >> test.hpp
+echo '#define TEST_HPP' >> test.hpp
+echo '#include<iostream>' >> test.hpp
+echo '#include<cassert>' >> test.hpp
+echo '#define YELLOW "\033[01;033m"' >> test.hpp
+echo '#define GREEN "\033[01;032m"' >> test.hpp
+echo '#define RESET "\033[01;0m"' >> test.hpp
+echo ' ' >> test.hpp
+echo '#include"graph.hpp" ' >> test.hpp
+echo ' ' >> test.hpp
+echo ' ' >> test.hpp
+echo 'void test_v1()' >> test.hpp
+echo '{' >> test.hpp
+echo '	//empty body' >> test.hpp
+echo '}' >> test.hpp
+echo 'void test_v2()' >> test.hpp
+echo '{' >> test.hpp
+echo '	//empty body' >> test.hpp
+echo '}' >> test.hpp
+echo 'void test_v3()' >> test.hpp
+echo '{' >> test.hpp
+echo '	//empty body' >> test.hpp
+echo '}' >> test.hpp
+echo ' ' >> test.hpp
+echo ' ' >> test.hpp
+echo '#endif // TEST_HPP'>> test.hpp
+
+#into main.cpp
+echo '#include"test.hpp"' >> main.cpp
+echo " " >> main.cpp
+echo "int main()" >> main.cpp
+echo "{" >> main.cpp
+echo '	test_v1();' >> main.cpp
+echo '	test_v2();' >> main.cpp
+echo '	test_v3();' >> main.cpp
+echo '	std::cout << GREEN; ' >> main.cpp
+echo '	std::cout <<  "\n\ntake your time"  <<  std::endl;' >> main.cpp
+echo '	std::cout << RESET; ' >> main.cpp
+echo "	return 0;" >> main.cpp
+echo "}" >> main.cpp
+
+#into graph.hpp
+echo '' >> graph.hpp
+echo '#ifndef GRAPH_HPP' >> graph.hpp
+echo '#define GRAPH_HPP' >> graph.hpp
+echo ' ' >> graph.hpp
+echo '#endif //GRAPH_HPP' >> graph.hpp
+
+#into graph.cpp
+echo '#include "graph.hpp" '>> graph.cpp
+
+#into makefile
+echo 'SOURCES := graph.cpp main.cpp' >> makefile
+echo 'OBJECTS := $(patsubst %.cpp,%.o,$(SOURCES))' >> makefile
+echo '' >> makefile
+echo '' >> makefile
+echo 'all: comp run' >> makefile
+echo 'comp:$(OBJECTS)' >> makefile
+echo '	@clear ' >> makefile
+echo '	@g++ $(OBJECTS) -o smd' >> makefile
+echo '' >> makefile
+echo 'graph.o:' >> makefile
+echo '	@g++ -c graph.cpp -o graph.o -std=c++11' >> makefile
+echo '' >> makefile
+echo 'main.o:' >> makefile
+echo '	@g++ -c main.cpp -o main.o -std=c++11' >> makefile
+echo '' >> makefile
+echo 'graph.dep:' >> makefile
+echo '	@g++ -c -MM graph.cpp -MT "graph.dep graph.o" -o graph.dep  -std=c++11' >> makefile
+echo '' >> makefile
+echo 'main.dep:' >> makefile
+echo '	@g++ -c -MM main.cpp -MT "main.dep main.o" -o main.dep -std=c++11'  >> makefile
+echo '-include graph.dep main.dep  -std=c++11' >> makefile
+
+
+echo ' ' >> makefile
+echo 'run:' >> makefile 
+echo '	@./smd' >> makefile
+echo '	@ctags -R .' >> makefile
+echo ' '
+echo 'clean:' >> makefile
+echo '	rm smd *.o *.dep tags' >> makefile
+exec make
